@@ -1,0 +1,63 @@
+services:
+  php:
+    build:
+        context: .
+    ports:
+      - 80:8080
+      - 5173:5173
+    volumes:
+      - ../:/var/www/html
+      - ./sites-available/:/etc/nginx/conf.d
+    environment:
+      PHP_UPLOAD_MAX_FILE_SIZE: "500M"
+      PHP_OPCACHE_ENABLE: "1"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - postgres_network
+  postgres:
+    image: postgres:18-trixie
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    networks:
+      - postgres_network
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    restart: unless-stopped
+    volumes:
+      - ./pgadmin/servers.json:/pgadmin4/servers.json
+      - pgadmin_data:/var/lib/pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    networks:
+      - postgres_network
+    depends_on:
+      - postgres
+  # minio:
+  #   image: minio/minio
+  #   restart: unless-stopped
+  #   ports:
+  #     - "${MINIO_PORT}:9000"
+  #     - "${MINIO_CONSOLE_PORT}:9001"
+  #   environment:
+  #     - MINIO_ROOT_USER=${MINIO_ROOT_USER}
+  #     - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
+  #   command: minio server --console-address :9001 /export
+volumes:
+  postgres_data:
+    driver: local
+  pgadmin_data:
+    driver: local
+networks:
+  postgres_network:
+    driver: bridge
