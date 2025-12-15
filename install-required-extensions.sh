@@ -19,8 +19,5 @@ else
 
     if [ -n "$EXTENSIONS" ]; then
         install-php-extensions $EXTENSIONS
-        rm -rf vendor
-        rm -f composer.lock
-        composer install --no-ansi
     fi
 fi
