@@ -9,9 +9,11 @@ USER root
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 COPY --chown=www-data:www-data . .
+COPY --chown=www-data:www-data install-required-extensions.sh /usr/local/bin/install-required-extensions
 
 RUN mkdir -p /home/www-data \
     && touch "${BASH_ENV}" \
+    && chmod +x /usr/local/bin/install-required-extensions \
     && echo '. "${BASH_ENV}"' >> /home/www-data/.bashrc
 
 RUN apt-get update -q -y && apt-get install -y \
@@ -25,8 +27,6 @@ RUN apt-get update -q -y && apt-get install -y \
     && curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/${NVM_VERSION}/install.sh | PROFILE="${BASH_ENV}" bash
 
 ENV HOME=/home/www-data/
-
-RUN printf '#!/bin/bash\n(composer check-platform-reqs --lock --no-ansi --format=json 2>/dev/null || true) \\\n    | jq -r '"'"'map(.name) | .[] | select(startswith("ext-")) | sub("^ext-"; "")'"'"'\n' > /usr/local/bin/required-extensions && chmod +x /usr/local/bin/required-extensions
 
 RUN nvm install --default
 
