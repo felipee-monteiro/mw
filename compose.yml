@@ -2,10 +2,13 @@ services:
   php:
     build:
         context: .
+        args:
+           PHP_VERSION: ${PHP_VERSION:-8.5}
     ports:
       - 8080:8080
       - 5176:5173
       - 3000:3000
+      - 3030:3030
     dns:
       - 1.1.1.1
       - 1.0.0.1
@@ -57,9 +60,11 @@ services:
       environment:
          - MINIO_ROOT_USER=${MINIO_ROOT_USER}
          - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
-      command: minio server --console-address :9001 /export
+      command: minio server --console-address :9001 /data
 volumes:
   postgres_data:
+    driver: local
+  minio_data:
     driver: local
   pgadmin_data:
     driver: local

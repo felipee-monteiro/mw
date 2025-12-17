@@ -1,4 +1,6 @@
-FROM serversideup/php:8.4-fpm-nginx
+ARG PHP_VERSION=8.5
+
+FROM serversideup/php:${PHP_VERSION}-fpm-nginx
 
 ENV NVM_VERSION=v0.40.3
 ENV NVM_DIR=/home/www-data/.nvm

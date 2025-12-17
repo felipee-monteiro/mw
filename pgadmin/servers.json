@@ -1,8 +1,8 @@
 {
   "Servers": {
     "1": {
-      "Name": "agendai",
-      "Group": "Server Group 1",
+      "Name": "mw",
+      "Group": "Multi Workspace",
       "Port": 5432,
       "Username": "mw",
       "Host": "postgres",
