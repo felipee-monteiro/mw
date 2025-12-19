@@ -2,6 +2,7 @@ ARG PHP_VERSION=8.5
 
 FROM serversideup/php:${PHP_VERSION}-fpm-nginx
 
+ENV JQ_VERSION=1.8.1
 ENV NVM_VERSION=v0.40.3
 ENV NVM_DIR=/home/www-data/.nvm
 ENV BASH_ENV=/home/www-data/.bash_env
@@ -13,15 +14,18 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 COPY --chown=www-data:www-data . .
 COPY --chown=www-data:www-data install-required-extensions.sh /usr/local/bin/install-required-extensions
 
+ADD --chown=www-data:www-data https://github.com/jqlang/jq/releases/download/jq-${JQ_VERSION}/jq-linux-amd64 /usr/local/bin/jq
+
 RUN mkdir -p /home/www-data \
     && touch "${BASH_ENV}" \
     && chmod +x /usr/local/bin/install-required-extensions \
-    && echo '. "${BASH_ENV}"' >> /home/www-data/.bashrc
+	 && chmod +x /usr/local/bin/jq \
+    && echo '. "${BASH_ENV}"' >> /home/www-data/.bashrc \
+	 && echo 'set-option -g default-command "source ~/.bashrc && bash --login"' >> /home/www-data/.tmux.conf
 
 RUN apt-get update -q -y && apt-get install -y \
     curl \
     git \
-    jq \
     tmux \
     && rm -rf /var/lib/apt/lists/* \
     && mkdir -p ${NVM_DIR} \
