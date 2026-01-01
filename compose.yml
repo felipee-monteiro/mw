@@ -24,12 +24,12 @@ services:
     networks:
       - postgres_network
   postgres:
-    image: postgres:18-trixie
+    image: postgres:18.1-trixie
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_DB: ${DB_DATABASE:-mw}
     ports:
       - "5433:5432"
     volumes:

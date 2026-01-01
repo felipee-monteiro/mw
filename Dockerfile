@@ -13,15 +13,15 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 COPY --chown=www-data:www-data . .
 COPY --chown=www-data:www-data install-required-extensions.sh /usr/local/bin/install-required-extensions
+COPY --chown=www-data:www-data .tmux.conf /home/www-data/.tmux.conf
 
 ADD --chown=www-data:www-data https://github.com/jqlang/jq/releases/download/jq-${JQ_VERSION}/jq-linux-amd64 /usr/local/bin/jq
 
 RUN mkdir -p /home/www-data \
     && touch "${BASH_ENV}" \
     && chmod +x /usr/local/bin/install-required-extensions \
-	 && chmod +x /usr/local/bin/jq \
-    && echo '. "${BASH_ENV}"' >> /home/www-data/.bashrc \
-	 && echo 'set-option -g default-command "source ~/.bashrc && bash --login"' >> /home/www-data/.tmux.conf
+	&& chmod +x /usr/local/bin/jq \
+    && echo '. "${BASH_ENV}"' >> /home/www-data/.bashrc 
 
 RUN apt-get update -q -y && apt-get install -y \
     curl \
