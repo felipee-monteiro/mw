@@ -18,7 +18,7 @@ services:
       - ./sites-available/:/etc/nginx/conf.d
     environment:
       PHP_UPLOAD_MAX_FILE_SIZE: "500M"
-      PHP_OPCACHE_ENABLE: "1"
+      PHP_OPCACHE_ENABLE: "0"
     extra_hosts:
       - "host.docker.internal:host-gateway"
     networks:
@@ -31,7 +31,7 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_DATABASE:-mw}
     ports:
-      - "5433:5432"
+      - "${DB_PORT:-5432}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql
     networks:
@@ -39,8 +39,9 @@ services:
   pgadmin:
     image: dpage/pgadmin4:latest
     restart: unless-stopped
+    user: root
     volumes:
-      - ./pgadmin/servers.json:/pgadmin4/servers.json
+      - ./pgadmin/servers.template.json:/pgadmin4/servers.json
       - pgadmin_data:/var/lib/pgadmin
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com

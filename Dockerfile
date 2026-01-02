@@ -11,7 +11,6 @@ USER root
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-COPY --chown=www-data:www-data . .
 COPY --chown=www-data:www-data install-required-extensions.sh /usr/local/bin/install-required-extensions
 COPY --chown=www-data:www-data .tmux.conf /home/www-data/.tmux.conf
 
@@ -33,6 +32,3 @@ RUN apt-get update -q -y && apt-get install -y \
     && curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/${NVM_VERSION}/install.sh | PROFILE="${BASH_ENV}" bash
 
 ENV HOME=/home/www-data/
-
-RUN nvm install --default
-

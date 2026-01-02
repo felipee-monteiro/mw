@@ -3,8 +3,9 @@
     "1": {
       "Name": "mw",
       "Group": "Multi Workspace",
-      "Port": 5432,
+      "Port": 5432, 
       "Username": "mw",
+      "Password": "mw",
       "Host": "postgres",
       "MaintenanceDB": "postgres",
       "ConnectionParameters": {
