@@ -20,7 +20,8 @@ RUN mkdir -p /home/www-data \
     && touch "${BASH_ENV}" \
     && chmod +x /usr/local/bin/install-required-extensions \
 	&& chmod +x /usr/local/bin/jq \
-    && echo '. "${BASH_ENV}"' >> /home/www-data/.bashrc 
+    && echo '. "${BASH_ENV}"' >> /home/www-data/.bashrc \
+	 && echo 'alias pa="php artisan"' >> /home/www-data/.bashrc 
 
 RUN apt-get update -q -y && apt-get install -y \
     curl \
