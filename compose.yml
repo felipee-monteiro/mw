@@ -4,6 +4,8 @@ services:
         context: .
         args:
            PHP_VERSION: ${PHP_VERSION:-8.5}
+           UID: ${UID:-1000}
+           GID: ${GID:-1000}
     ports:
       - 8080:8080
       - 5176:5173
