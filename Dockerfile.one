@@ -35,7 +35,7 @@ RUN apt-get update -q -y && apt-get install -y \
 
 RUN export EXTENSIONS=$((composer check-platform-reqs --lock --no-ansi --format=json 2>/dev/null || true) \
     | jq -r 'map(.name) | .[] | select(startswith("ext-")) | sub("^ext-"; "")') \
-    && install-php-extensions $EXTENSIONS
+    && install-php-extensions $EXTENSIONS intl
 
 ENV HOME=/home/www-data/
 
